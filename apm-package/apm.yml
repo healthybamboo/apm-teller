@@ -1,0 +1,18 @@
+name: apm-teller
+version: 0.1.0
+description: GUI + convention miner for APM marketplace repos. Run `apm-teller serve` inside a vault.
+author: healthybamboo
+targets:
+  - claude
+  - copilot
+  - vscode
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts:
+  teller: npx apm-teller serve
+  teller:mine: npx apm-teller mine
+  teller:doctor: npx apm-teller doctor

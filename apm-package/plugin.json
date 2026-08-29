@@ -1,0 +1,7 @@
+{
+  "name": "apm-teller",
+  "version": "0.1.0",
+  "description": "GUI + convention miner for APM marketplace repos",
+  "author": { "name": "healthybamboo" },
+  "license": "MIT"
+}

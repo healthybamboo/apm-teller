@@ -1,0 +1,39 @@
+# apm-teller configuration. Committed alongside apm.yml — no external state.
+# vault: owner/repo   # inferred from `git remote origin` when omitted
+
+# Where the tool keeps its files inside this repo (all vault-relative).
+paths:
+  conventions: .teller/conventions          # mined team conventions (1 file = 1 convention, reviewed in the GUI)
+  runs: .teller/runs                        # mining run summaries (*.md committable, *.log ignored)
+  raw: .teller/raw                          # fetched review comments (ignored by default)
+  prompt: .teller/prompts/extract-conventions.md
+  agent_settings: .teller/claude/settings.json
+  codex_hooks: .codex/hooks.json            # Codex reads hooks from here automatically
+
+# How this marketplace presents itself (edited from the GUI).
+catalog:
+  featured: []
+  packages: {}
+  presets: []
+  # install_templates: []   # override the default per-assistant install commands
+
+# Where conventions are mined from.
+mining:
+  language: ja                              # language for mined convention text (title / Rule / Rationale)
+  sources: []
+  #  - repo: owner/repo
+  #    prs: 30
+  #    include: [reviews, review_comments, issue_comments]
+  agent:
+    kind: claude                            # claude | codex (switchable per run from the GUI)
+    claude:
+      permission_mode: acceptEdits
+      allowed_tools: [Read, Glob, Grep, Write, Edit]
+      setting_sources: [user, project, local] # same as a normal terminal; drop "user" to ignore ~/.claude/settings.json
+      extra_args: []                        # e.g. ["--model", "..."]
+    codex:
+      approval: on-request                  # untrusted | on-request | never
+      sandbox: workspace-write              # read-only | workspace-write | danger-full-access
+      # model: gpt-5-codex
+      extra_args: []
+  # requirements: []        # override the doctor's tool checks

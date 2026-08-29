@@ -1,0 +1,151 @@
+/* ---------- tokens: ink on cool paper ---------- */
+:root {
+  --paper: #F2F4F6; --paper-2: #FFFFFF; --paper-3: #E8EBEF;
+  --ink: #17202A; --ink-2: #4B5563; --ink-3: #8A94A0;
+  --rule: #D5DAE0; --rule-2: #C2C8D0;
+  --signal: #1E4FD8; --signal-soft: #E6ECFB;
+  --moss: #1F7A4A; --moss-soft: #E2F2E8;
+  --stamp: #B23A2E; --stamp-soft: #F8E5E2;
+  --amber: #A06A00; --amber-soft: #F8EEDA;
+  --term: #10151B;
+  --display: "Bricolage Grotesque", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --body: "Public Sans", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 10px; --radius-s: 6px;
+  --sidebar: 236px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0F1419; --paper-2: #161C23; --paper-3: #1C242D;
+    --ink: #E8ECF0; --ink-2: #AEB7C1; --ink-3: #6E7A87;
+    --rule: #263039; --rule-2: #33404B;
+    --signal: #7FA3FF; --signal-soft: #1A2740;
+    --moss: #6CC895; --moss-soft: #14291D;
+    --stamp: #F08A7C; --stamp-soft: #3A1B17;
+    --amber: #E6B45A; --amber-soft: #33270F;
+    --term: #0B0F13;
+  }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }
+
+* { box-sizing: border-box }
+html, body { height: 100% }
+body { margin: 0; font: 14px/1.55 var(--body); color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased }
+a { color: var(--signal); text-decoration: none } a:hover { text-decoration: underline }
+code, pre, .mono { font-family: var(--mono); font-size: 12.5px }
+code { background: var(--paper-3); padding: 1px 5px; border-radius: 4px }
+h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; margin: 0 }
+h2 { font-size: 20px; font-weight: 600; margin: 22px 0 10px } h3 { font-size: 14px; font-weight: 600; margin: 14px 0 6px; color: var(--ink-2); text-transform: none }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px }
+
+/* ---------- shell: ledger sidebar + workbench ---------- */
+.shell { display: grid; grid-template-columns: var(--sidebar) 1fr; min-height: 100vh }
+.side { position: sticky; top: 0; height: 100vh; border-right: 1px solid var(--rule); background: var(--paper-2); display: flex; flex-direction: column; padding: 18px 14px }
+.brand { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.02em; padding: 4px 10px 14px; display: flex; align-items: baseline; gap: 8px }
+.brand small { font-family: var(--mono); font-weight: 400; font-size: 11px; color: var(--ink-3) }
+.nav { display: flex; flex-direction: column; gap: 2px }
+.nav button { font: inherit; text-align: left; background: none; border: 0; color: var(--ink-2); padding: 9px 10px; border-radius: var(--radius-s); cursor: pointer; display: flex; align-items: center; gap: 10px }
+.nav button:hover { background: var(--paper-3); color: var(--ink) }
+.nav button.active { background: var(--ink); color: var(--paper-2) }
+.nav .k { font-family: var(--mono); font-size: 11px; color: var(--ink-3); width: 18px } .nav button.active .k { color: color-mix(in srgb, var(--paper-2) 60%, transparent) }
+.ledger { margin: 14px 10px 0; padding-top: 12px; border-top: 1px dashed var(--rule-2) }
+.ledger .row-l { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-2); padding: 3px 0 }
+.ledger .row-l b { font-family: var(--mono); font-weight: 500; color: var(--ink) }
+.ledger .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 8px; vertical-align: 1px }
+.side .foot { margin-top: auto; padding: 10px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); line-height: 1.7; word-break: break-all }
+.side .foot select { font: inherit; font-size: 11px; background: none; border: 1px solid var(--rule); border-radius: 4px; color: var(--ink-2); padding: 2px 6px; margin-top: 6px }
+main { padding: 26px 36px 60px; max-width: 1180px; width: 100% }
+.page-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 4px }
+.page-head h1 { font-size: 26px; font-weight: 600 }
+.lede { color: var(--ink-2); margin: 0 0 18px; max-width: 70ch }
+@media (max-width: 860px) { .shell { grid-template-columns: 1fr } .side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--rule) } main { padding: 18px } }
+
+/* ---------- surfaces ---------- */
+.card { background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px }
+.card + .card { margin-top: 12px }
+.card.selected { border-color: var(--signal); box-shadow: 0 0 0 3px var(--signal-soft) }
+.card-title { font-family: var(--display); font-weight: 600; font-size: 15px; margin-bottom: 8px }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap }
+.muted { color: var(--ink-3) } .small { font-size: 12.5px }
+.empty { color: var(--ink-3); padding: 18px 8px; text-align: center }
+pre { background: var(--paper-3); padding: 10px 12px; border-radius: var(--radius-s); overflow: auto; white-space: pre-wrap; word-break: break-word; margin: 8px 0 }
+pre.error { background: var(--stamp-soft); color: var(--stamp); border: 1px solid color-mix(in srgb, var(--stamp) 30%, transparent) }
+
+/* ---------- controls ---------- */
+input, select, textarea { font: inherit; padding: 6px 9px; border: 1px solid var(--rule-2); border-radius: var(--radius-s); background: var(--paper-2); color: var(--ink) }
+input:focus, select:focus, textarea:focus { border-color: var(--signal); outline: none; box-shadow: 0 0 0 3px var(--signal-soft) }
+textarea { width: 100%; min-height: 220px; font-family: var(--mono); font-size: 12.5px; line-height: 1.5 }
+label { display: inline-flex; align-items: center; gap: 6px }
+.btn { font: inherit; font-weight: 500; padding: 6px 12px; border-radius: var(--radius-s); border: 1px solid var(--rule-2); background: var(--paper-2); color: var(--ink); cursor: pointer; transition: background .12s, border-color .12s }
+.btn:hover { background: var(--paper-3) } .btn:disabled { opacity: .45; cursor: default }
+.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper-2) } .btn-primary:hover { background: color-mix(in srgb, var(--ink) 85%, var(--signal)) }
+.btn-danger { color: var(--stamp); border-color: color-mix(in srgb, var(--stamp) 45%, transparent) } .btn-danger:hover { background: var(--stamp-soft) }
+.btn-ghost { border-color: transparent; background: none; color: var(--ink-2) } .btn-ghost:hover { background: var(--paper-3); color: var(--ink) }
+.btn.active { background: var(--ink); color: var(--paper-2); border-color: var(--ink) }
+
+/* ---------- badges: dot + label ---------- */
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px 1px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 500; background: var(--paper-3); color: var(--ink-2) }
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3) }
+.badge-ok { background: var(--moss-soft); color: var(--moss) } .badge-ok::before { background: var(--moss) }
+.badge-bad { background: var(--stamp-soft); color: var(--stamp) } .badge-bad::before { background: var(--stamp) }
+.badge-warn { background: var(--amber-soft); color: var(--amber) } .badge-warn::before { background: var(--amber) }
+.badge-info { background: var(--signal-soft); color: var(--signal) } .badge-info::before { background: var(--signal) }
+
+/* ---------- package tree ---------- */
+.tree { margin: 8px 0 0 4px; padding-left: 12px; border-left: 2px solid var(--rule); list-style: none }
+.tree li { margin: 4px 0 }
+.tree a { color: var(--ink) } .tree a:hover { color: var(--signal) }
+
+/* ---------- review: filter + list/detail ---------- */
+.seg { display: inline-flex; border: 1px solid var(--rule-2); border-radius: var(--radius-s); overflow: hidden; margin-bottom: 12px }
+.seg button { font: inherit; font-size: 13px; background: var(--paper-2); border: 0; border-right: 1px solid var(--rule); padding: 7px 14px; cursor: pointer; color: var(--ink-2); display: inline-flex; gap: 8px; align-items: center }
+.seg button:last-child { border-right: 0 } .seg button.active { background: var(--ink); color: var(--paper-2) }
+.seg .n { font-family: var(--mono); font-size: 11px } .seg button.active .n { opacity: .7 }
+.split { display: grid; grid-template-columns: 360px 1fr; gap: 14px; align-items: start } @media (max-width: 900px) { .split { grid-template-columns: 1fr } }
+.list { padding: 0; overflow: hidden }
+.list-item { padding: 10px 14px; border-bottom: 1px solid var(--rule); cursor: pointer } .list-item:last-child { border-bottom: 0 }
+.list-item:hover { background: var(--paper-3) } .list-item.active { background: var(--signal-soft); box-shadow: inset 3px 0 0 var(--signal) }
+.kanban { display: none }
+
+/* ---------- mining: steps, checks, progress, terminal, log ---------- */
+.step { display: flex; align-items: center; gap: 10px; margin: 24px 0 8px; font-size: 16px }
+.step-n { display: inline-flex; width: 24px; height: 24px; border-radius: 50%; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; background: var(--paper-3); color: var(--ink-2); border: 1px solid var(--rule-2) }
+.step-n.done { background: var(--moss); border-color: var(--moss); color: #fff } .step-n.blocked { background: var(--stamp-soft); border-color: var(--stamp); color: var(--stamp) }
+.banner { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-s); margin-bottom: 10px; font-weight: 500 }
+.banner .btn { margin-left: auto }
+.banner-ok { color: var(--moss); background: var(--moss-soft) } .banner-bad { color: var(--stamp); background: var(--stamp-soft) } .banner-info { color: var(--signal); background: var(--signal-soft) }
+.check-group h4 { margin: 12px 0 2px; font-family: var(--mono); font-weight: 500; font-size: 11px; color: var(--ink-3); letter-spacing: .06em; text-transform: uppercase }
+.check { display: grid; grid-template-columns: 20px 1fr; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--rule) } .check:last-child { border-bottom: 0 }
+.check .ok { color: var(--moss); font-weight: 700 } .check .bad { color: var(--stamp); font-weight: 700 } .check .warn { color: var(--amber); font-weight: 700 }
+.fix { margin-top: 2px; color: var(--amber) }
+.skeleton { height: 12px; width: 60%; border-radius: 4px; background: var(--paper-3); animation: pulse 1.2s ease-in-out infinite } @keyframes pulse { 50% { opacity: .35 } }
+.spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px } @keyframes spin { to { transform: rotate(360deg) } }
+.bar-wrap { margin: 10px 0 } .bar-label { margin-bottom: 4px; color: var(--ink-2); font-family: var(--mono); font-size: 12px }
+.bar { height: 6px; border-radius: 3px; background: var(--paper-3); overflow: hidden; position: relative }
+.bar-fill { height: 100%; background: var(--signal); transition: width .4s }
+.bar.indeterminate .bar-fill { position: absolute; width: 30%; animation: slide 1.2s ease-in-out infinite } @keyframes slide { 0% { left: -30% } 100% { left: 100% } }
+.progress { margin: 6px 0 0; color: var(--ink-2); font-family: var(--mono); font-size: 12px }
+.terminal { height: 480px; background: var(--term); border-radius: var(--radius-s); padding: 8px; margin: 10px 0; overflow: hidden; line-height: normal; border: 1px solid var(--rule) }
+.terminal .xterm { height: 100% } .terminal .xterm .xterm-viewport { overflow-y: auto } .terminal .xterm .xterm-rows { line-height: normal }
+.log { max-height: 360px; overflow: auto; font-family: var(--mono); font-size: 12px; line-height: 1.5 } .log > div { padding: 1px 0 } .log-warn { color: var(--amber) } .log a { text-decoration: underline }
+details > summary { cursor: pointer; color: var(--ink-2) }
+.kind { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3); border:1px solid var(--rule-2); border-radius:3px; padding:0 4px; margin-right:4px; vertical-align:1px }
+
+/* package card: whole header is the hit area */
+.card.pkg { padding: 0 }
+.card.pkg > * { padding-left: 16px; padding-right: 16px }
+.pkg-hit { padding: 14px 16px 10px; cursor: pointer; border-radius: var(--radius) var(--radius) 0 0; user-select: none }
+.pkg-hit:hover { background: var(--paper-3) } .card.selected .pkg-hit { background: var(--signal-soft) }
+.pkg-hit:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px }
+.tick { display: inline-flex; width: 18px; height: 18px; border-radius: 4px; border: 1.5px solid var(--rule-2); align-items: center; justify-content: center; font-size: 12px; color: #fff; background: var(--paper-2); flex: none }
+.tick.on { background: var(--signal); border-color: var(--signal) }
+.card.pkg .tree, .card.pkg > div:not(.pkg-hit) { padding-bottom: 12px }
+.card.pkg .tree { margin-left: 20px }
+
+.chip { font: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border-radius: 999px; border: 1px solid var(--rule-2); background: var(--paper-2); color: var(--ink-2); cursor: pointer; user-select: none }
+.chip:hover { background: var(--paper-3); color: var(--ink) }
+.chip.on { background: var(--signal-soft); border-color: var(--signal); color: var(--signal) }
+.chip:disabled { opacity: .5; cursor: default }
+.chip-tick { display: inline-flex; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--rule-2); align-items: center; justify-content: center; font-size: 10px; color: #fff }
+.chip.on .chip-tick { background: var(--signal); border-color: var(--signal) }

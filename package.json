@@ -1,0 +1,22 @@
+{
+  "name": "apm-teller-monorepo",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build": "pnpm -r --filter ./packages/core --filter ./packages/web --filter ./packages/cli run build",
+    "dev:web": "pnpm --filter @apm-teller/web dev",
+    "dev:server": "pnpm --filter apm-teller dev",
+    "typecheck": "pnpm -r run typecheck",
+    "teller": "node packages/cli/dist/index.js",
+    "lint": "eslint \"packages/*/src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint --fix \"packages/*/src/**/*.{ts,tsx}\"",
+    "postinstall": "node scripts/fix-node-pty.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "eslint": "^9.17.0",
+    "typescript-eslint": "^8.19.0",
+    "eslint-plugin-jsdoc": "^50.6.1",
+    "@stylistic/eslint-plugin": "^2.12.1"
+  }
+}
