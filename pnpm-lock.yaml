@@ -26,9 +26,6 @@ importers:
 
   packages/cli:
     dependencies:
-      '@apm-teller/core':
-        specifier: workspace:*
-        version: link:../core
       '@hono/node-server':
         specifier: ^1.13.7
         version: 1.19.17(hono@4.13.5)
@@ -50,7 +47,13 @@ importers:
       yaml:
         specifier: ^2.6.1
         version: 2.9.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
+      '@apm-teller/core':
+        specifier: workspace:*
+        version: link:../core
       '@types/node':
         specifier: ^22.10.2
         version: 22.20.1

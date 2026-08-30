@@ -1,7 +1,7 @@
 {
   "name": "apm-teller",
   "version": "0.1.0",
-  "description": "GUI + insight miner for Microsoft APM marketplace repos. Everything lives in the vault repo as text.",
+  "description": "Local GUI and convention miner for Microsoft APM marketplace repos (vaults). Mines implicit team conventions from PR reviews with Claude Code / Codex and promotes them into APM packages.",
   "type": "module",
   "bin": {
     "apm-teller": "./dist/index.js",
@@ -10,27 +10,30 @@
   "files": [
     "dist",
     "templates",
-    "public"
+    "public",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup && node scripts/copy-web.mjs",
     "typecheck": "tsc -p tsconfig.json",
-    "dev": "tsx src/index.ts serve"
+    "dev": "tsx src/index.ts serve",
+    "prepublishOnly": "cd ../.. && pnpm build && node packages/cli/scripts/check-publish.mjs"
   },
   "dependencies": {
-    "@apm-teller/core": "workspace:*",
     "@hono/node-server": "^1.13.7",
     "@hono/node-ws": "^1.3.1",
     "commander": "^12.1.0",
     "gray-matter": "^4.0.3",
     "hono": "^4.6.14",
     "node-pty": "^1.1.0",
-    "yaml": "^2.6.1"
+    "yaml": "^2.6.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "tsup": "^8.3.5",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "@apm-teller/core": "workspace:*"
   },
   "license": "MIT",
   "repository": {
@@ -45,5 +48,12 @@
     "claude-code",
     "codex",
     "marketplace"
-  ]
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": "https://github.com/healthybamboo/apm-teller/issues"
 }
