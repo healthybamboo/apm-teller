@@ -6,16 +6,16 @@ description: Operate an APM marketplace repo (vault) with apm-teller — inspect
 # apm-teller
 
 Everything apm-teller knows lives in the vault repo as text: `teller.yml` (catalog + mining settings + paths)
-and `.teller/` (conventions, prompts, Claude hooks settings, run summaries). There is no external state.
+and `.teller/` (conventions, prompts, Claude hooks settings, run summaries) plus `.codex/hooks.json`. There is no external state.
 
 ## Commands (run at the vault root)
 
 | Command | What it does |
 | --- | --- |
-| `apm-teller init` | Creates `teller.yml`, `.teller/prompts/extract-conventions.md`, `.teller/claude/settings.json` |
-| `apm-teller doctor` | Verifies `gh` (+auth, repo access), `claude`, `apm`, `apm-teller` on PATH |
+| `apm-teller init` | Creates `teller.yml`, `.teller/prompts/extract-conventions.md`, `.teller/claude/settings.json`, `.codex/hooks.json` |
+| `apm-teller doctor` | Verifies `gh` (+auth, repo access per host), `claude` / `codex`, `apm`, `apm-teller` on PATH |
 | `apm-teller serve` | Local GUI: catalog / conventions review / mining |
-| `apm-teller mine [owner/repo...]` | `gh` fetch → `claude -p` writes `.teller/conventions/<id>.md` (validated by hook) |
+| `apm-teller mine [owner/repo...] [--agent claude\|codex]` | `gh` fetch → interactive Claude Code / Codex session writes `.teller/conventions/<id>.md` (validated by hooks, then re-validated on exit) |
 | `apm-teller validate --all` | Validate convention files (same check the hook runs) |
 | `apm-teller review <id> accept\|reject\|reopen` | Change a convention's status |
 | `apm-teller promote <id> --package <name> [--kind skill\|instruction] [--apply-to glob]` | Write an accepted convention into `packages/<name>/.apm/...` and register the package in `apm.yml` |
