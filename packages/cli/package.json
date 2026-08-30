@@ -1,6 +1,6 @@
 {
   "name": "apm-teller",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local GUI and convention miner for Microsoft APM marketplace repos (vaults). Mines implicit team conventions from PR reviews with Claude Code / Codex and promotes them into APM packages.",
   "type": "module",
   "bin": {
