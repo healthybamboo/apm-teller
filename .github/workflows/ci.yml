@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm lint
+      # 公開物のスモークテスト: tarball を別ディレクトリに入れて init / status が動くこと
+      - name: Pack and smoke test
+        run: |
+          cd packages/cli && npm pack --silent && cd ../..
+          mkdir -p /tmp/smoke/vault && cd /tmp/smoke
+          npm init -y >/dev/null && npm i --silent "$GITHUB_WORKSPACE"/packages/cli/apm-teller-*.tgz
+          cd vault && printf 'name: t\nversion: 0.1.0\nmarketplace:\n  packages: []\n' > apm.yml
+          ../node_modules/.bin/apm-teller init && ../node_modules/.bin/apm-teller status

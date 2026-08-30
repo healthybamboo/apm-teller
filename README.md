@@ -108,6 +108,12 @@ pnpm lint
 
 To run the local build as `apm-teller`, put a shim on your `PATH` that executes `packages/cli/dist/index.js`, or `npm link` from `packages/cli`.
 
+## Releasing
+
+CI (`.github/workflows/ci.yml`) builds, type-checks, lints and smoke-tests the packed tarball on every push and PR.
+To publish: bump `version` in `packages/cli/package.json`, commit, then push a matching tag — `git tag v0.1.1 && git push origin v0.1.1`.
+The release workflow verifies the tag matches the version, publishes `apm-teller` to npm with provenance (requires an `NPM_TOKEN` repository secret) and creates a GitHub release.
+
 ## License
 
 MIT
