@@ -31,5 +31,19 @@
     "@types/node": "^22.10.2",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2"
-  }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/healthybamboo/apm-teller.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/healthybamboo/apm-teller#readme",
+  "keywords": [
+    "apm",
+    "agent-package-manager",
+    "claude-code",
+    "codex",
+    "marketplace"
+  ]
 }
