@@ -111,8 +111,7 @@ To run the local build as `apm-teller`, put a shim on your `PATH` that executes 
 ## Releasing
 
 CI (`.github/workflows/ci.yml`) builds, type-checks, lints and smoke-tests the packed tarball on every push and PR.
-To publish: bump `version` in `packages/cli/package.json`, commit, then push a matching tag — `git tag v0.1.1 && git push origin v0.1.1`.
-The release workflow verifies the tag matches the version, publishes `apm-teller` to npm with provenance (requires an `NPM_TOKEN` repository secret) and creates a GitHub release.
+To publish, open **Actions → Release → Run workflow** and choose `patch`, `minor`, `major` or an explicit version. The workflow bumps `packages/cli/package.json`, commits, tags `v<version>`, publishes `apm-teller` to npm with provenance (requires an `NPM_TOKEN` repository secret) and creates a GitHub release. Pushing a `v*` tag by hand (with the version already bumped) triggers the same publish.
 
 ## License
 

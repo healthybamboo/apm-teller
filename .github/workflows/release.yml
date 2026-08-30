@@ -1,9 +1,18 @@
 name: Release
 
-# v0.1.0 のようなタグを push すると npm に公開する。
-# 事前に: repo の Secrets に NPM_TOKEN（npm の Automation token）を登録し、
-# packages/cli/package.json の version をタグと一致させておくこと。
+# 2 通りで起動できる:
+#  - Actions の「Run workflow」からバージョンの上げ方（patch / minor / major / 明示指定）を選ぶ
+#    → version を上げてコミット・タグ push・npm 公開・GitHub Release までを 1 回で行う
+#  - v0.1.1 のようなタグを手で push する（version は先に合わせておくこと）
+# 事前に: repo の Secrets に NPM_TOKEN（npm の Automation token）を登録する。
 on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump (patch / minor / major) or an explicit version like 1.2.3"
+        required: true
+        default: patch
+        type: string
   push:
     tags: ["v*"]
 
@@ -11,11 +20,15 @@ permissions:
   contents: write
   id-token: write   # npm provenance
 
+concurrency: release
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -23,14 +36,36 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
+
+      # --- 手動起動: version を上げてコミットとタグを作る ---
+      - name: Bump version, commit and tag
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: packages/cli
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          NEW=$(npm version "${{ inputs.bump }}" --no-git-tag-version | sed 's/^v//')
+          cd ../..
+          git add packages/cli/package.json
+          git commit -m "chore(release): $NEW"
+          git tag "v$NEW"
+          git push origin HEAD:main
+          git push origin "v$NEW"
+          echo "RELEASE_TAG=v$NEW" >> "$GITHUB_ENV"
+      - name: Use pushed tag
+        if: github.event_name == 'push'
+        run: echo "RELEASE_TAG=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+
       - name: Check tag matches package version
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
+          TAG="${RELEASE_TAG#v}"
           PKG=$(node -p "require('./packages/cli/package.json').version")
           if [ "$TAG" != "$PKG" ]; then echo "tag v$TAG != packages/cli version $PKG"; exit 1; fi
+
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm lint
+
       # provenance（sigstore の来歴署名）は public リポジトリでしか検証できないため、可視性で切り替える
       - name: Publish to npm
         working-directory: packages/cli
@@ -43,7 +78,9 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: GitHub release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.RELEASE_TAG }}
           generate_release_notes: true
